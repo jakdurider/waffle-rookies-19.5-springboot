@@ -19,4 +19,8 @@ class OperatingSystemService(
     fun getOperatingSystemById(id: Long): OperatingSystem {
         return operatingSystemRepository.findByIdOrNull(id) ?: throw OsNotFoundException()
     }
+
+    fun getOperatingSystemByName(name: String): OperatingSystem {
+        return operatingSystemRepository.findByNameEquals(name) ?: throw OsNotFoundException()
+    }
 }

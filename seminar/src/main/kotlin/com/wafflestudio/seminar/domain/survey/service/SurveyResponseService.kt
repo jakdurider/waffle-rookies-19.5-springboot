@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.survey.service
 
 import com.wafflestudio.seminar.domain.os.repository.OperatingSystemRepository
+import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import com.wafflestudio.seminar.domain.os.exception.OsNotFoundException
 import com.wafflestudio.seminar.domain.survey.exception.SurveyNotFoundException
 import com.wafflestudio.seminar.domain.survey.model.SurveyResponse
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 class SurveyResponseService(
     private val surveyResponseRepository: SurveyResponseRepository,
     private val operatingSystemRepository: OperatingSystemRepository,
+    private val userRepository: UserRepository,
 ) {
     fun getAllSurveyResponses(): List<SurveyResponse> {
         return surveyResponseRepository.findAll()
@@ -24,5 +26,13 @@ class SurveyResponseService(
 
     fun getSurveyResponseById(id: Long): SurveyResponse? {
         return surveyResponseRepository.findByIdOrNull(id) ?: throw SurveyNotFoundException()
+    }
+
+    fun addSurveyResponse(newSurveyResponse : SurveyResponse, userId : Long, osName: String?): SurveyResponse?{
+        var surveyResponse = newSurveyResponse
+        surveyResponse.os = operatingSystemRepository.findByNameEquals(osName) ?: throw OsNotFoundException()
+        surveyResponse.user = userRepository.findByIdOrNull(userId)
+
+        return surveyResponseRepository.save(surveyResponse)
     }
 }

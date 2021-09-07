@@ -2,10 +2,14 @@ package com.wafflestudio.seminar.domain.survey.api
 
 import com.wafflestudio.seminar.domain.survey.dto.SurveyResponseDto
 import com.wafflestudio.seminar.domain.os.exception.OsNotFoundException
+import com.wafflestudio.seminar.domain.os.service.OperatingSystemService
 import com.wafflestudio.seminar.domain.survey.exception.SurveyNotFoundException
 import com.wafflestudio.seminar.domain.survey.model.SurveyResponse
 import com.wafflestudio.seminar.domain.survey.service.SurveyResponseService
 import org.modelmapper.ModelMapper
+
+import org.modelmapper.convention.MatchingStrategies
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -41,14 +45,22 @@ class SurveyResponseController(
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/", consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE))
     fun addSurveyResponse(
         @ModelAttribute @Valid body: SurveyResponseDto.CreateRequest,
         @RequestHeader("User-Id") userId: Long
-    ): SurveyResponseDto.Response {
+    ): ResponseEntity<SurveyResponseDto.Response> {
         //TODO: API 생성
-//        val newSurveyResponse = modelMapper.map(body, SurveyResponse::class.java)
-        return SurveyResponseDto.Response()
+        return try {
+            //modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+            var newSurveyResponse = modelMapper.map(body,SurveyResponse::class.java)
+            //modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+            val newSurveyResponseResult = surveyResponseService.addSurveyResponse(newSurveyResponse,userId,body.osName)
+            val responseBody = modelMapper.map(newSurveyResponseResult, SurveyResponseDto.Response::class.java)
+            ResponseEntity.ok(responseBody)
+        } catch (e: OsNotFoundException){
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PatchMapping("/{id}/")

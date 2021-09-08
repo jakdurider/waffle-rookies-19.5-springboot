@@ -22,7 +22,7 @@ class SurveyResponse(
     var os: OperatingSystem? = null,
 
     // add user_id column to survey_response table
-    @ManyToOne(fetch=FetchType.LAZY, cascade=arrayOf(CascadeType.PERSIST)) // one user can respond to survey several times
+    @ManyToOne//(cascade=arrayOf(CascadeType.PERSIST)) // one user can respond to survey several times
     // which type of cascadetype should I use?
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     var user: User? = null,

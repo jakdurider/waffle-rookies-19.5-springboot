@@ -11,10 +11,10 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @NotBlank
+    @field:NotBlank
     var name: String,
 
-    @NotBlank
+    @field:NotBlank
     var email: String,
 
 )

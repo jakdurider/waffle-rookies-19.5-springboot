@@ -23,8 +23,8 @@ class UserService(
     fun getUserByEmail(email: String) : User? {
         return userRepository.findByEmail(email)
     }
-    fun addUser(newUser: User): Unit {
+    fun addUser(newUser: User): User? {
         if(getUserByEmail(newUser.email)!=null) throw EmailAlreadyExist()
-        userRepository.save(newUser)
+        return userRepository.save(newUser)
     }
 }

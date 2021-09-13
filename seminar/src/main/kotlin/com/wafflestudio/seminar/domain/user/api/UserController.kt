@@ -19,6 +19,7 @@ class UserController(
     private val userService: UserService,
     private val modelMapper: ModelMapper
 ) {
+    /*
     @GetMapping("/")
     fun getUsers(@RequestParam(required = false) user: Int?): ResponseEntity<List<UserDto.Response>> {
         return try {
@@ -29,7 +30,7 @@ class UserController(
             ResponseEntity.notFound().build()
         }
         // AOP를 적용해 exception handling을 따로 하도록 고쳐보셔도 됩니다.
-    }
+    }*/
 
     @GetMapping("/me/")
     fun getUserById(@RequestHeader("User-Id") user_Id: Long): ResponseEntity<UserDto.Response> {
@@ -46,13 +47,14 @@ class UserController(
     @PostMapping("/", consumes = arrayOf(MediaType.MULTIPART_FORM_DATA_VALUE))
     fun addUser(
         @ModelAttribute @Valid body: UserDto.CreateRequest,
-    ): Unit {
-        try {
+    ): ResponseEntity<UserDto.Response> {
+        return try {
             val newUser = modelMapper.map(body, User::class.java)
-            userService.addUser(newUser)
+            val newUserResult = userService.addUser(newUser)
+            ResponseEntity.ok(modelMapper.map(newUserResult,UserDto.Response::class.java))
         }
         catch (e : EmailAlreadyExist){
-
+            ResponseEntity.notFound().build()
         }
     }
 

@@ -52,12 +52,10 @@ class SurveyResponseController(
     ): ResponseEntity<SurveyResponseDto.Response> {
         //TODO: API 생성
         return try {
-            //modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
             var newSurveyResponse = modelMapper.map(body,SurveyResponse::class.java)
-            //modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
             val newSurveyResponseResult = surveyResponseService.addSurveyResponse(newSurveyResponse,userId,body.osName)
             val responseBody = modelMapper.map(newSurveyResponseResult, SurveyResponseDto.Response::class.java)
-            ResponseEntity.ok(responseBody)
+            ResponseEntity.status(201).body(responseBody)
         } catch (e: OsNotFoundException){
             ResponseEntity.notFound().build()
         }

@@ -33,7 +33,7 @@ class SurveyResponseDto {
     // TODO: 아래 두 DTO 완성
     data class CreateRequest(
         @field:NotBlank
-        var osName: String? = null,
+        var osName: String,
 
         @field:NotNull
         @field:Min(1,message="springExp should be more than 1")

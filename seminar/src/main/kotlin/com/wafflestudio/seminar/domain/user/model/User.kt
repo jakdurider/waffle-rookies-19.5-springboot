@@ -1,4 +1,4 @@
-package com.wafflestudio.seminar.domain.os.model
+package com.wafflestudio.seminar.domain.user.model
 
 import javax.persistence.*
 import javax.validation.constraints.Min
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Entity
-class OperatingSystem(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -15,8 +15,8 @@ class OperatingSystem(
     var name: String,
 
     @field:NotBlank
-    var description: String? = null,
+    var email: String,
 
-    @field:NotNull
-    var price: Long? = null,
 )
+
+

@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.survey.model
 
 import com.wafflestudio.seminar.domain.os.model.OperatingSystem
+import com.wafflestudio.seminar.domain.user.model.User
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Max
@@ -17,31 +18,37 @@ class SurveyResponse(
 
     @ManyToOne
     @JoinColumn(name = "os_id", referencedColumnName = "id")
-    @NotNull
+    @field:NotNull
     var os: OperatingSystem? = null,
 
+    // add user_id column to survey_response table
+    @ManyToOne//(cascade=arrayOf(CascadeType.PERSIST)) // one user can respond to survey several times
+    // which type of cascadetype should I use?
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    var user: User? = null,
+
     @Column(name = "spring_exp")
-    @NotNull
-    @Min(0, message = "The value must be between 1 and 5")
-    @Max(5, message = "The value must be between 1 and 5")
+    @field:NotNull
+    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Max(5, message = "The value must be between 1 and 5")
     var springExp: Int? = null,
 
     @Column(name = "rdb_exp")
-    @NotNull
-    @Min(0, message = "The value must be between 1 and 5")
-    @Max(5, message = "The value must be between 1 and 5")
+    @field:NotNull
+    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Max(5, message = "The value must be between 1 and 5")
     var rdbExp: Int? = null,
 
     @Column(name = "programming_exp")
-    @NotNull
-    @Min(0, message = "The value must be between 1 and 5")
-    @Max(5, message = "The value must be between 1 and 5")
+    @field:NotNull
+    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Max(5, message = "The value must be between 1 and 5")
     var programmingExp: Int? = null,
 
-    @NotBlank
+    @field:NotBlank
     var major: String? = null,
 
-    @NotBlank
+    @field:NotBlank
     var grade: String? = null,
 
     @Column(name = "backend_reason")
@@ -52,6 +59,7 @@ class SurveyResponse(
     @Column(name = "something_to_say")
     var somethingToSay: String? = null,
 
-    @NotNull
-    var timestamp: LocalDateTime = LocalDateTime.now(),
+    @field:NotNull
+    var timestamp: LocalDateTime? = LocalDateTime.now(),
+
 )

@@ -1,22 +1,27 @@
 package com.wafflestudio.seminar.domain.user.dto
 
-import javax.validation.constraints.Min
+import com.wafflestudio.seminar.domain.user.model.User
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 class UserDto {
     data class Response(
-        var id: Long? = null,
-        var name: String = "",
-        var email: String = "",
-    )
+        val id: Long,
+        val email: String,
+        val name: String,
+    ) {
+        constructor(user: User) : this(
+            id = user.id,
+            email = user.email,
+            name = user.name
+        )
+    }
 
-    data class CreateRequest(
-        //var id: Long? = null,
+    data class SignupRequest(
         @field:NotBlank
-        var name: String = "",
+        val email: String,
         @field:NotBlank
-        var email: String = "",
-
+        val name: String,
+        @field:NotBlank
+        val password: String,
     )
 }

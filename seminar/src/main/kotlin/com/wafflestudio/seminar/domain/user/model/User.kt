@@ -1,25 +1,22 @@
 package com.wafflestudio.seminar.domain.user.model
 
-import com.wafflestudio.seminar.domain.model.BaseEntity
 import javax.persistence.*
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Entity
-@Table(name = "seminar_user")
 class User(
-    @Column(unique = true)
-    @field:NotBlank
-    val email: String,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
 
     @field:NotBlank
-    val name: String,
+    var name: String,
 
     @field:NotBlank
-    val password: String,
+    var email: String,
 
-    @Column
-    @field:NotNull
-    val roles: String = "",
+)
 
-    ) : BaseEntity()
+

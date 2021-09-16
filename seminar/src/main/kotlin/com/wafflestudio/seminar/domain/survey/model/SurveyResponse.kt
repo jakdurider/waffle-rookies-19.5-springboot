@@ -1,6 +1,5 @@
 package com.wafflestudio.seminar.domain.survey.model
 
-import com.wafflestudio.seminar.domain.model.BaseEntity
 import com.wafflestudio.seminar.domain.os.model.OperatingSystem
 import com.wafflestudio.seminar.domain.user.model.User
 import java.time.LocalDateTime
@@ -13,47 +12,54 @@ import javax.validation.constraints.NotNull
 
 @Entity
 class SurveyResponse(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+
     @ManyToOne
     @JoinColumn(name = "os_id", referencedColumnName = "id")
     @field:NotNull
-    val os: OperatingSystem,
+    var os: OperatingSystem? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
-    val user: User?,
+    // add user_id column to survey_response table
+    @ManyToOne//(cascade=arrayOf(CascadeType.PERSIST)) // one user can respond to survey several times
+    // which type of cascadetype should I use?
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    var user: User? = null,
 
     @Column(name = "spring_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    val springExp: Int,
+    var springExp: Int? = null,
 
     @Column(name = "rdb_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    val rdbExp: Int,
+    var rdbExp: Int? = null,
 
     @Column(name = "programming_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    val programmingExp: Int,
+    var programmingExp: Int? = null,
 
     @field:NotBlank
-    val major: String,
+    var major: String? = null,
 
     @field:NotBlank
-    val grade: String,
+    var grade: String? = null,
 
     @Column(name = "backend_reason")
-    val backendReason: String? = null,
+    var backendReason: String? = null,
     @Column(name = "waffle_reason")
-    val waffleReason: String? = null,
+    var waffleReason: String? = null,
 
     @Column(name = "something_to_say")
-    val somethingToSay: String? = null,
+    var somethingToSay: String? = null,
 
     @field:NotNull
-    val timestamp: LocalDateTime = LocalDateTime.now(),
-): BaseEntity()
+    var timestamp: LocalDateTime? = LocalDateTime.now(),
+
+)

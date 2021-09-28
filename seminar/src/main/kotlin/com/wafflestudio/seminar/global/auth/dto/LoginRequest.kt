@@ -1,7 +1,10 @@
 package com.wafflestudio.seminar.global.auth.dto
 
-class LoginRequest (
-    val email: String? = null,
+import javax.validation.constraints.NotBlank
 
-    val password: String? = null
+class LoginRequest (
+    @field:NotBlank
+    val email: String,
+    @field:NotBlank
+    val password: String,
 )

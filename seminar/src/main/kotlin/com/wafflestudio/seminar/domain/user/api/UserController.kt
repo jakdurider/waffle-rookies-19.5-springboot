@@ -24,6 +24,12 @@ class UserController(
         return ResponseEntity.ok().header("Authentication", jwtTokenProvider.generateToken(user.email)).body(UserDto.Response(user))
     }
 
+    @PostMapping("/login/")
+    fun login(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<UserDto.Response> {
+        val user = userService.login(loginRequest)
+        return ResponseEntity.ok().header("Authentication", jwtTokenProvider.generateToken(user.email)).body(UserDto.Response(user))
+    }
+
     @GetMapping("/me/")
     fun getCurrentUser(@CurrentUser user: User): UserDto.Response {
         return UserDto.Response(user)

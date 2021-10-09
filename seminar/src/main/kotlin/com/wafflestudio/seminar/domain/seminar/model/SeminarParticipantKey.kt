@@ -1,14 +1,13 @@
 package com.wafflestudio.seminar.domain.seminar.model
 
 import java.io.Serializable
-import javax.persistence.*
-
+import javax.persistence.Column
+import javax.persistence.Embeddable
 
 @Embeddable
-class SeminarParticipantKey : Serializable {
-    @Column(name = "participant_id")
-    val participantId: Long = 0
-
-    @Column(name = "seminar_id")
-    val seminarId: Long = 0
-}
+class SeminarParticipantKey (
+        @Column(name = "participant_id")
+        var participantId: Long = 0,
+        @Column(name = "seminar_id")
+        var seminarId: Long = 0,
+        ) : Serializable

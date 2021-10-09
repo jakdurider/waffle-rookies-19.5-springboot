@@ -6,18 +6,17 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-
 @Entity
 @Table(name = "seminar_user")
 class User(
     @Column(unique = true)
     @field:NotBlank
-    var email: String,
+    val email: String,
 
     @field:NotBlank
-    var name: String,
+    val name: String,
 
-    val date_joined : LocalDateTime = LocalDateTime.now(),
+    val date_joined: LocalDateTime = LocalDateTime.now(),
 
     @field:NotBlank
     val password: String,
@@ -25,8 +24,6 @@ class User(
     @Column
     @field:NotNull
     val roles: String = "",
-
-    val role : String,
 
     @OneToOne
     @JoinColumn(name = "participant_profile", referencedColumnName = "id", nullable = true)

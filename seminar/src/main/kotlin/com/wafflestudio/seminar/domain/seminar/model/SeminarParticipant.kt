@@ -1,33 +1,35 @@
 package com.wafflestudio.seminar.domain.seminar.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
-import com.wafflestudio.seminar.domain.os.model.OperatingSystem
 import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import java.time.LocalDateTime
 import javax.persistence.*
-import javax.validation.constraints.NotNull
 
 @Entity
 class SeminarParticipant (
-    @EmbeddedId
-    val seminarParticipantKey : SeminarParticipantKey,
+        @EmbeddedId
+        var id: SeminarParticipantKey,
 
-    @field:NotNull
-    val joined_at : LocalDateTime = LocalDateTime.now(),
+        @ManyToOne
+        @MapsId("participantId")
+        @JoinColumn(name="participant_id",referencedColumnName = "id")
+        val participant : ParticipantProfile,
 
-    @field:NotNull
-    val is_active : Boolean,
 
-    val dropped_at : LocalDateTime? = null,
+        @ManyToOne
+        @MapsId("seminarId")
+        @JoinColumn(name="seminar_id",referencedColumnName = "id")
+        val seminar : Seminar,
 
-    @ManyToOne
-    @MapsId("participantId")
-    @JoinColumn(name = "participant_id", referencedColumnName = "id", nullable = true)
-    val participantProfile : ParticipantProfile?,
+        var joined_at : LocalDateTime = LocalDateTime.now(),
+        var is_active : Boolean = true,
+        var dropped_at : LocalDateTime? = null,
 
-    @ManyToOne
-    @MapsId("seminarId")
-    @JoinColumn(name = "seminar_id", referencedColumnName = "id", nullable = true)
-    val seminar : Seminar?,
+        @CreatedDate
+        var created_at: LocalDateTime? = null,
 
-    ) : BaseTimeEntity()
+        @LastModifiedDate
+        var updated_at: LocalDateTime? = null,
+        )

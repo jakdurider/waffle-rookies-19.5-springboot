@@ -13,7 +13,7 @@ class InstructorProfile (
         @JoinColumn(name = "seminar_id", referencedColumnName = "id", nullable = true)
         var charge: Seminar? = null,
 
-        @OneToOne(mappedBy="instructor_profile")
+        @OneToOne(mappedBy="instructor_profile", cascade = [CascadeType.ALL])
         var user: User? = null,
 
         ) : BaseTimeEntity()

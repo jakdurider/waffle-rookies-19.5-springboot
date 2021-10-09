@@ -47,7 +47,7 @@ class UserService(
 
     fun login(loginRequest: LoginRequest) : User{
         val user =  userRepository.findByEmail(loginRequest.email)?: throw NoUserMatchException("No email matching")
-        if(user.password == loginRequest.password) return user;
+        if(passwordEncoder.encode(user.password) == loginRequest.password) return user;
         else throw NoUserMatchException("Password does not match")
     }
 

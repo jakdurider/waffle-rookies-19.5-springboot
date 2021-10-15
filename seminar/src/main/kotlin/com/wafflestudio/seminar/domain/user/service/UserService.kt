@@ -45,10 +45,8 @@ class UserService(
         else throw InvalidRoleException("Role should be participant or instructor")
     }
 
-    fun login(loginRequest: LoginRequest) : User{
-        val user =  userRepository.findByEmail(loginRequest.email)?: throw NoUserMatchException("No email matching")
-        if(passwordEncoder.encode(user.password) == loginRequest.password) return user;
-        else throw NoUserMatchException("Password does not match")
+    fun getUserByEmail(email: String) : User{
+        return userRepository.findByEmail(email)?: throw NoUserMatchException("There is no matching user")
     }
 
     fun getUserById(user_id: Long) : User{

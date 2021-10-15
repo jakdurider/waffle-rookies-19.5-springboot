@@ -5,7 +5,9 @@ import com.wafflestudio.seminar.domain.user.service.UserService
 import com.wafflestudio.seminar.domain.user.dto.UserDto
 import com.wafflestudio.seminar.global.auth.CurrentUser
 import com.wafflestudio.seminar.global.auth.JwtTokenProvider
+import com.wafflestudio.seminar.global.auth.dto.LoginRequest
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -19,7 +21,7 @@ class UserController(
     @PostMapping("/")
     fun signup(@Valid @RequestBody signupRequest: UserDto.SignupRequest): ResponseEntity<UserDto.Response> {
         val user = userService.signup(signupRequest)
-        return ResponseEntity.noContent().header("Authentication", jwtTokenProvider.generateToken(user.email)).build()
+        return ResponseEntity.ok().header("Authentication", jwtTokenProvider.generateToken(user.email)).body(UserDto.Response(user))
     }
 
     @GetMapping("/me/")
@@ -27,20 +29,23 @@ class UserController(
         return UserDto.Response(user)
     }
 
+    // when giving user object to user service and repository,
+    // repository.save() does not work for update so I give user_id
+    // to get entity from repository
     @GetMapping("/{user_id}/")
-    fun getUserById(@CurrentUser user: User): UserDto.Response {
-        return UserDto.Response(user)
+    fun getUserById(@PathVariable("user_id") user_id: Long): UserDto.Response {
+        return UserDto.Response(userService.getUserById(user_id))
     }
 
     @PutMapping("/me/")
-    fun modifyCurrentUser(@Valid @RequestBody modifyRequest: UserDto.ModifyRequest, @CurrentUser user : User) : UserDto.Response {
-        val modifiedUser = userService.modify(modifyRequest,user)
-        return UserDto.Response(modifiedUser)
+    fun modifyCurrentUser(@Valid @RequestBody modifyRequest: UserDto.ModifyRequest, @CurrentUser user: User): UserDto.Response{
+        return UserDto.Response(userService.modify(modifyRequest,user.id))
     }
 
+    // api for instructor to resignup to participant
     @PostMapping("/participant/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun reSignupToParticipant(@Valid @RequestBody signupRequest: UserDto.SignupRequest, @CurrentUser user: User): UserDto.Response{
-        return UserDto.Response(userService.reSignup(signupRequest,user))
+    fun signupToParticipant(@Valid @RequestBody participantRequest: UserDto.ParticipantRequest, @CurrentUser user: User): UserDto.Response{
+        return UserDto.Response(userService.signupToParticipant(participantRequest, user.id))
     }
 }

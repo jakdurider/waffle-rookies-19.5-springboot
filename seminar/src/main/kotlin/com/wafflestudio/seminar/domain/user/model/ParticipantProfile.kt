@@ -3,17 +3,16 @@ package com.wafflestudio.seminar.domain.user.model
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
 import com.wafflestudio.seminar.domain.seminar.model.SeminarParticipant
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 @Entity
 class ParticipantProfile (
-        @field:NotBlank
-        var university : String,
+        var university: String,
+        val accepted: Boolean,
 
-        @field:NotNull
-        val accepted : Boolean,
+        @OneToMany(cascade = [CascadeType.ALL], mappedBy = "participant", fetch = FetchType.EAGER)
+        var seminars : MutableList<SeminarParticipant> = mutableListOf(),
 
-        @OneToMany(cascade = [CascadeType.ALL],mappedBy="participantProfile")
-        var seminars : List<SeminarParticipant> = listOf()
+        @OneToOne(mappedBy="participant_profile")
+        var user: User? = null,
+
         ) : BaseTimeEntity()

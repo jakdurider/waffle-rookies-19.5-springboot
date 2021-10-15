@@ -1,6 +1,10 @@
 package com.wafflestudio.seminar.global.auth
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.wafflestudio.seminar.domain.user.dto.UserDto
+import com.wafflestudio.seminar.domain.user.service.UserService
 import com.wafflestudio.seminar.global.auth.dto.LoginRequest
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -25,7 +29,7 @@ class SigninAuthenticationFilter(
         request: HttpServletRequest,
         response: HttpServletResponse,
         chain: FilterChain,
-        authResult: Authentication
+        authResult: Authentication,
     ) {
         response.addHeader("Authentication", jwtTokenProvider.generateToken(authResult))
         response.status = HttpServletResponse.SC_NO_CONTENT
@@ -43,14 +47,13 @@ class SigninAuthenticationFilter(
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
         // Parse auth request
         val parsedRequest: LoginRequest = parseRequest(request)
-        val authRequest: Authentication =
-            UsernamePasswordAuthenticationToken(parsedRequest.email, parsedRequest.password)
+        val authRequest: Authentication = UsernamePasswordAuthenticationToken(parsedRequest.email, parsedRequest.password)
         return authenticationManager.authenticate(authRequest)
     }
 
     private fun parseRequest(request: HttpServletRequest): LoginRequest {
         val reader: BufferedReader = request.reader
-        val objectMapper = ObjectMapper()
+        val objectMapper = jacksonObjectMapper()
         return objectMapper.readValue(reader, LoginRequest::class.java)
     }
 

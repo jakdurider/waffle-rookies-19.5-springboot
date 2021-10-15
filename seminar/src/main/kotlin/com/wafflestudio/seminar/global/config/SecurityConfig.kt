@@ -56,7 +56,6 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/api/v1/users/signin/").permitAll()  // Auth entrypoint
             .antMatchers(HttpMethod.POST, "/api/v1/users/").anonymous()  // SignUp user
-            .antMatchers(HttpMethod.POST, "/api/v1/users/login/").anonymous()
             .anyRequest().authenticated()
     }
 

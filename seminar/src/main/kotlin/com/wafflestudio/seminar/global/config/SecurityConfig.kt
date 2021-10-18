@@ -55,6 +55,7 @@ class SecurityConfig(
             .addFilter(JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
             .authorizeRequests()
             .antMatchers("/api/v1/users/signin/").permitAll()  // Auth entrypoint
+            .antMatchers("/ping/").permitAll()
             .antMatchers(HttpMethod.POST, "/api/v1/users/").anonymous()  // SignUp user
             .anyRequest().authenticated()
     }
